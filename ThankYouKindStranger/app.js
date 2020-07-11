@@ -253,6 +253,23 @@ client.on('message', (message) => {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }
+        message.reply("Clown created: " + args[0]);
+    }
+    if (command == "clowns") {
+        message.channel.send("The clowns are: ");
+        var clownListEmbed = new Discord.MessageEmbed();
+        var list = "";
+        for (var clownName in clowns) {
+            list += clownName;
+            list += "\n";
+        }
+        clownListEmbed.addField("~~~~~~~~~~~~~~~~~", list);
+        message.channel.send(clownListEmbed);
+    }
+    if (command == "removeclown") {
+        if (message.author.id != "190672357143216130")
+            return;
+        message.channel.send("you are authorized");
     }
 });
 /*Quote response*/

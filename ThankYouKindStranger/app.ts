@@ -288,7 +288,41 @@ client.on('message', (message) => {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }
+        message.reply("Clown created: " + args[0]);
     }
+
+    if (command == "clowns") {
+        message.channel.send("The clowns are: ");
+        var clownListEmbed = new Discord.MessageEmbed();
+        var list = "";
+        for (var clownName in clowns) {
+            list += clownName;
+            list += "\n";
+        }
+        clownListEmbed.addField("~~~~~~~~~~~~~~~~~", list);
+        message.channel.send(clownListEmbed);
+    }
+
+    if (command == "removeclown") {
+        if (message.author.id != "190672357143216130") return;
+        console.log("you are authorized");
+        console.log("Attempting to remove the clown: " + args[0]);
+        if (typeof clowns[args[0]] != "undefined") {
+            message.channel.send("This clown doesn't exist!");
+            console.log("Clown does not exist");
+            return;
+        }
+        delete clowns[args[0]];
+        console.log("Deleted " + args[0]);
+        fs.writeFile("./clowns.json", JSON.stringify(clowns), (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Clowns.json updated");
+        });
+    }
+
 });
 
 /*Quote response*/
@@ -313,14 +347,23 @@ user                   User                   The user that applied the emoji or
 client.on("messageReactionAdd", function (messageReaction, user) {
     console.log(`a reaction is added to a message`);
     console.log(messageReaction.emoji.name);
+
     if (messageReaction.emoji.name != "gold")
     {
         
         console.log("not a gold emoji");
         return;
     }
+
+
+
     var user = messageReaction.message.author.id;
     var server = messageReaction.message.guild.id;
+
+    var gifter = messageReaction.client.user.id;
+    if (gifter == user) return; //can't give gold to yourself
+
+
     var db = new sqlite3.Database('goldScore.sqlite');
     db.get("SELECT Score FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
         console.log(typeof row);
@@ -352,6 +395,10 @@ client.on("messageReactionRemove", function (messageReaction, user) {
     }
     var user = messageReaction.message.author.id;
     var server = messageReaction.message.guild.id;
+
+    var gifter = messageReaction.client.user.id;
+    if (gifter == user) return; //can't give gold to yourself
+
     var db = new sqlite3.Database('goldScore.sqlite');
     db.get("SELECT Score FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
         console.log(typeof row);
