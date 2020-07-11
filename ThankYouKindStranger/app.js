@@ -17,22 +17,7 @@ var sqlite3 = require('sqlite3').verbose();
 //db.run("INSERT INTO RealmGold (User, Server, Score) VALUES (222, 333, 123)");
 //* ********************Database Management
 /*clown cam setup*/
-var clowns = {
-    malachi: true,
-    avery: true,
-    emma: true,
-    caleb: true,
-    keaton: true,
-    bella: true,
-    zeke: true,
-    james: true,
-    paul: true,
-    adolfo: true,
-    dario: true,
-    muffin: true,
-    dawson: true,
-    isaiah: true
-};
+var clowns = require("./clowns.json");
 /* DEEPSPEECH SETUP */
 /*
 let DEEPSPEECH_MODEL; // path to deepspeech model directory
@@ -250,6 +235,24 @@ client.on('message', (message) => {
             });
             db.close();
         });
+    }
+    if (command == "addclown") {
+        if (typeof clowns[args[0]] != "undefined") {
+            message.channel.send("This clown already exists!");
+            return;
+        }
+        clowns[args[0]] = true;
+        fs.writeFile("./clowns.json", JSON.stringify(clowns), (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Clowns updated");
+        });
+        var dir = "./Images/" + args[0];
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
     }
 });
 /*Quote response*/

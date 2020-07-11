@@ -22,22 +22,7 @@ var sqlite3 = require('sqlite3').verbose();
 //* ********************Database Management
 
 /*clown cam setup*/
-var clowns = {
-    malachi: true,
-    avery: true,
-    emma: true,
-    caleb: true,
-    keaton: true,
-    bella: true,
-    zeke: true,
-    james: true,
-    paul: true,
-    adolfo: true,
-    dario: true,
-    muffin: true,
-    dawson: true,
-    isaiah: true
-}
+var clowns = require("./clowns.json");
 
 /* DEEPSPEECH SETUP */
 /*
@@ -155,9 +140,9 @@ client.on('message', (message) => {
     }
 });
 
+
+
 /*Random Image Command Parsing*/
-
-
 
 var lastImage;
 client.on('message', (message) => {
@@ -284,6 +269,25 @@ client.on('message', (message) => {
             });
             db.close();
         });
+    }
+
+    if (command == "addclown") {
+        if (typeof clowns[args[0]] != "undefined") {
+            message.channel.send("This clown already exists!");
+            return;
+        }
+        clowns[args[0]] = true;
+        fs.writeFile("./clowns.json", JSON.stringify(clowns), (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Clowns updated");
+        });
+        var dir = "./Images/" + args[0];
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
     }
 });
 
