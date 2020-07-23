@@ -269,7 +269,22 @@ client.on('message', (message) => {
     if (command == "removeclown") {
         if (message.author.id != "190672357143216130")
             return;
-        message.channel.send("you are authorized");
+        console.log("you are authorized");
+        console.log("Attempting to remove the clown: " + args[0]);
+        if (typeof clowns[args[0]] == "undefined") {
+            message.channel.send("This clown doesn't exist!");
+            console.log("Clown does not exist");
+            return;
+        }
+        delete clowns[args[0]];
+        console.log("Deleted " + args[0]);
+        fs.writeFile("./clowns.json", JSON.stringify(clowns), (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Clowns.json updated");
+        });
     }
 });
 /*Quote response*/
@@ -297,6 +312,9 @@ client.on("messageReactionAdd", function (messageReaction, user) {
     }
     var user = messageReaction.message.author.id;
     var server = messageReaction.message.guild.id;
+    var gifter = messageReaction.client.user.id;
+    if (gifter == user)
+        return; //can't give gold to yourself
     var db = new sqlite3.Database('goldScore.sqlite');
     db.get("SELECT Score FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
         console.log(typeof row);
@@ -325,6 +343,9 @@ client.on("messageReactionRemove", function (messageReaction, user) {
     }
     var user = messageReaction.message.author.id;
     var server = messageReaction.message.guild.id;
+    var gifter = messageReaction.client.user.id;
+    if (gifter == user)
+        return; //can't give gold to yourself
     var db = new sqlite3.Database('goldScore.sqlite');
     db.get("SELECT Score FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
         console.log(typeof row);

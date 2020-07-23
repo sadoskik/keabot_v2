@@ -307,7 +307,7 @@ client.on('message', (message) => {
         if (message.author.id != "190672357143216130") return;
         console.log("you are authorized");
         console.log("Attempting to remove the clown: " + args[0]);
-        if (typeof clowns[args[0]] != "undefined") {
+        if (typeof clowns[args[0]] == "undefined") {
             message.channel.send("This clown doesn't exist!");
             console.log("Clown does not exist");
             return;
