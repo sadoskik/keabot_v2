@@ -1,0 +1,22 @@
+{
+  "name": "thank-you-kind-stranger",
+  "version": "0.0.0",
+  "description": "ThankYouKindStranger",
+  "main": "app.js",
+  "author": {
+    "name": "Keaton Sadoski"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "deepspeech": "^0.7.3",
+    "discord.js": "^12.2.0",
+    "sqlite3": "^4.2.0"
+  }
+}

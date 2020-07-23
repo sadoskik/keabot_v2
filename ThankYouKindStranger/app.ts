@@ -10,7 +10,7 @@ const fs = require('fs');
 const url = require('url');
 const http = require('http');
 const util = require('util');
-const DeepSpeech = require('deepspeech');
+
 
 //* ********************Usefull Javascript Capabilities
 
@@ -203,7 +203,7 @@ client.on('message', (message) => {
                     console.log('Successfully found image');
                     res.on('data', (data) => {
                         file.write(data);
-                        console.log('Image Data');
+                        //console.log('Image Data');
                     });
                     res.on('end', () => {
                         file.end();

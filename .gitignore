@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/ThankYouKindStranger/chatbot.txt
+/ThankYouKindStranger/TFidfVectorize.py
+/ThankYouKindStranger/package-lock.json
+/ThankYouKindStranger/Images
