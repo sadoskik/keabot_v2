@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "deepspeech": "^0.7.3",
+    "discord": "^0.8.2",
     "discord.js": "^12.2.0",
     "sqlite3": "^4.2.0"
   }
