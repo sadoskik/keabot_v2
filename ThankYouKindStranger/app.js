@@ -12,59 +12,8 @@ const util = require('util');
 //* ********************Usefull Javascript Capabilities
 // //////////////////// Database Management
 var sqlite3 = require('sqlite3').verbose();
-//db.run("CREATE TABLE RealmGold (User, Server, Score)");
-//db.run("INSERT INTO RealmGold (User, Server, Score) VALUES (222, 333, 123)");
-//* ********************Database Management
 /*clown cam setup*/
 var clowns = require("./clowns.json");
-/* DEEPSPEECH SETUP */
-/*
-let DEEPSPEECH_MODEL; // path to deepspeech model directory
-if (process.env.DEEPSPEECH_MODEL) {
-    DEEPSPEECH_MODEL = process.env.DEEPSPEECH_MODEL;
-}
-else {
-    DEEPSPEECH_MODEL = __dirname + '/deepspeech-0.7.0-models';
-}
-
-function createModel(modelDir) {
-    let modelPath = modelDir + '.pbmm';
-    let scorerPath = modelDir + '.scorer';
-    let model = new DeepSpeech.Model(modelPath);
-    model.enableExternalScorer(scorerPath);
-    return model;
-}
-let englishModel = createModel(DEEPSPEECH_MODEL);
-
-let modelStream;
-let recordedChunks = 0;
-let silenceStart = null;
-let recordedAudioLength = 0;
-let endTimeout = null;
-let silenceBuffers = [];
-let firstChunkVoice = false;
-
-function endAudioStream(callback) {
-    console.log('[end]');
-    let results = intermediateDecode();
-    if (results) {
-        if (callback) {
-            callback(results);
-        }
-    }
-}
-
-function resetAudioStream() {
-    clearTimeout(endTimeout);
-    console.log('[reset]');
-    intermediateDecode(); // ignore results
-    recordedChunks = 0;
-    silenceStart = null;
-}
-
-
-
-*/
 console.log('Hello world');
 /* Startup */
 console.log(`The current day is ${(new Date()).getDate()} of ${(new Date()).getMonth() + 1}`);
