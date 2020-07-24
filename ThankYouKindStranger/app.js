@@ -35,7 +35,7 @@ client.on('message', (message) => {
             console.log("Is DM");
         else {
             var embedBoard = new Discord.MessageEmbed();
-            var db = new sqlite3.Database('goldScore.sqlite');
+            var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
             db.all("SELECT User, Server, Score FROM RealmGold WHERE Server = (?) ORDER BY Score DESC", server, (err, rows) => {
                 let i;
                 console.log(rows + " " + rows.length);
@@ -57,7 +57,7 @@ client.on('message', (message) => {
         if (message.channel.type == 'dm')
             console.log("Is DM");
         else {
-            var db = new sqlite3.Database('goldScore.sqlite');
+            var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
             db.get("SELECT Score, User FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
                 console.log("Score report: " + row.Score + " " + row.User);
                 if (typeof row == "undefined" || row == null)
@@ -80,7 +80,7 @@ client.on('message', (message) => {
     const command = args.shift().toLowerCase();
     var server = message.guild.id;
     var user = message.author.id;
-    var imageRoot = "C:/Users/Keaton/source/repos/ThankYouKindStranger/ThankYouKindStranger/Images/";
+    var imageRoot = __dirname+"/Images/";
     if (command == "addimage") {
         /* user invokes this then posts a pic. the argument will be the name of the person they want associated.
          * this needs to check if the infrastructure for the name has been set up. if not, create a folder for the user and
@@ -94,7 +94,7 @@ client.on('message', (message) => {
             const currentTime = new Date();
             console.log("file: " + file);
             const this_url = file.proxyURL;
-            const DOWNLOAD_DIR = `C:/Users/Keaton/source/repos/ThankYouKindStranger/ThankYouKindStranger/Images/` + args[0] + "/";
+            const DOWNLOAD_DIR = __dirname + `/Images/` + args[0] + "/";
             const seed = Math.floor(Math.random() * 200);
             const file_name = args[0] + currentTime.getDate() + currentTime.getSeconds() + seed + this_url.slice(this_url.length - 4);
             console.log("file name is " + file_name);
@@ -134,7 +134,7 @@ client.on('message', (message) => {
                 });
             };
             download_file_httpget(this_url);
-            var db = new sqlite3.Database('goldScore.sqlite');
+            var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
             db.run("INSERT INTO Images (Name, Filename, Server) VALUES ((?), (?), (?))", args[0], file_name, server);
             db.close();
             message.reply("New content added to clown: " + args[0]);
@@ -150,7 +150,7 @@ client.on('message', (message) => {
         const file_name = broken[broken.length - 1];
         const name = broken[broken.length - 2];
         console.log("Name: " + name + "\nFile Name: " + file_name);
-        var db = new sqlite3.Database('goldScore.sqlite');
+        var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
         db.run("DELETE FROM Images WHERE Name = (?) AND Filename = (?) AND Server = (?)", name, file_name, server);
         console.log("Removed");
         message.reply("Removed: " + file_name);
@@ -161,12 +161,17 @@ client.on('message', (message) => {
          * make a SQL query that grabs the list of the entries. generate a random number
          * and grab that picture from the user's folder.
          */
-        var db = new sqlite3.Database('goldScore.sqlite');
+        var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
         db.all("SELECT Filename FROM Images WHERE Name = (?) AND Server = (?)", command, server, (err, rows) => {
             console.log(rows);
+            if(!rows){
+                db.close();
+                return;
+            }
             if (rows.length == 0) {
                 console.log("No SQL results found for image");
                 message.channel.send("I don't have any pictures of that person!");
+                db.close();
                 return;
             }
             console.log("Number of rows is: " + rows.length);
@@ -263,7 +268,7 @@ client.on("messageReactionAdd", function (messageReaction, user) {
     var gifter = messageReaction.client.user.id;
     if (gifter == user)
         return; //can't give gold to yourself
-    var db = new sqlite3.Database('goldScore.sqlite');
+    var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
     db.get("SELECT Score FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
         console.log(typeof row);
         if (typeof row == 'undefined') {
@@ -294,7 +299,7 @@ client.on("messageReactionRemove", function (messageReaction, user) {
     var gifter = messageReaction.client.user.id;
     if (gifter == user)
         return; //can't give gold to yourself
-    var db = new sqlite3.Database('goldScore.sqlite');
+    var db = new sqlite3.Database(__dirname + '/goldScore.sqlite');
     db.get("SELECT Score FROM RealmGold WHERE User = (?) AND Server = (?)", user, server, (err, row) => {
         console.log(typeof row);
         if (typeof row == 'undefined') {
